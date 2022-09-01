@@ -3,6 +3,7 @@
 import { Component } from "react";
 import AddComment from "./AddComment";
 import CommentsList from "./CommentsList";
+import Error from "./Error";
 import Loading from "./Loading";
 
 class CommentArea extends Component {
@@ -19,7 +20,7 @@ class CommentArea extends Component {
   fetchComments = async () => {
     try {
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/comments/" + this.props.asin,
+        "https://striveschool-api.herokuapp.com/api/commentsttt/" + this.props.asin,
         {
           headers: {
             Authorization:
@@ -45,6 +46,7 @@ class CommentArea extends Component {
     return (
       <div>
         {this.state.loading && <Loading />}
+        {this.state.error && <Error />}
         <AddComment asin={this.props.asin} />
         <CommentsList commentList={this.state.comments} />
       </div>

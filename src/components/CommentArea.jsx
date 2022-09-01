@@ -1,7 +1,9 @@
 // Aggiungi un componente CommentArea alla fine del tuo SingleBook. Quando l’untente cliccherà su un SingleBook, i commenti dovranno apparire (suggerimento: short-circuit operator!).
 
 import { Component } from "react";
+import AddComment from "./AddComment";
 import CommentsList from "./CommentsList";
+import Loading from "./Loading";
 
 class CommentArea extends Component {
   state = {
@@ -17,7 +19,7 @@ class CommentArea extends Component {
   fetchComments = async () => {
     try {
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/comments/" + this.props.bookId,
+        "https://striveschool-api.herokuapp.com/api/comments/" + this.props.asin,
         {
           headers: {
             Authorization:
@@ -28,20 +30,25 @@ class CommentArea extends Component {
       if (response.ok) {
         let data = await response.json();
         console.log(data);
-        this.setState({ comments: data, loading: false });
+        this.setState({ comments: data, loading: false, error: false });
       } else {
         alert("something went wrong");
         this.setState({ loading: false, error: true });
       }
     } catch (error) {
       console.log(error);
-
       this.setState({ loading: false, error: true });
     }
   };
 
   render() {
-    return <CommentsList list={this.state.comments} />;
+    return (
+      <div>
+        {this.state.loading && <Loading />}
+        <AddComment asin={this.props.asin} />
+        <CommentsList commentList={this.state.comments} />
+      </div>
+    );
   }
 }
 

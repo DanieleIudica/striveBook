@@ -20,7 +20,7 @@ class CommentArea extends Component {
   fetchComments = async () => {
     try {
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/commentsttt/" + this.props.asin,
+        "https://striveschool-api.herokuapp.com/api/comments/" + this.props.asin,
         {
           headers: {
             Authorization:
@@ -42,9 +42,15 @@ class CommentArea extends Component {
     }
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== this.props) {
+      this.fetchComments();
+    }
+  }
+
   render() {
     return (
-      <div>
+      <div className="w-75">
         {this.state.loading && <Loading />}
         {this.state.error && <Error />}
         <AddComment asin={this.props.asin} />

@@ -1,26 +1,34 @@
 // Aggiungi un componente CommentArea alla fine del tuo SingleBook. Quando l’untente cliccherà su un SingleBook, i commenti dovranno apparire (suggerimento: short-circuit operator!).
 
-import { Component } from "react";
+import { useState, useEffect } from "react";
 import AddComment from "./AddComment";
 import CommentsList from "./CommentsList";
 import Error from "./Error";
 import Loading from "./Loading";
 
-class CommentArea extends Component {
-  state = {
-    comments: [],
-    loading: true,
-    error: false,
-  };
+const CommentArea = (props) => {
+  // state = {
+  //   comments: [],
+  //   loading: true,
+  //   error: false,
+  // };
+  let [comments, setComments] = useState([]);
+  let [loading, setLoading] = useState(true);
+  let [error, setError] = useState(false);
 
-  componentDidMount() {
-    this.fetchComments();
-  }
+  // componentDidMount() {
+  //   this.fetchComments();
+  // }
+  useEffect(() => {
+    console.log("componentDidMount chiamato");
+    fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  fetchComments = async () => {
+  const fetchComments = async () => {
     try {
       let response = await fetch(
-        "https://striveschool-api.herokuapp.com/api/comments/" + this.props.asin,
+        "https://striveschool-api.herokuapp.com/api/comments/" + props.asin,
         {
           headers: {
             Authorization:
@@ -31,33 +39,42 @@ class CommentArea extends Component {
       if (response.ok) {
         let data = await response.json();
         console.log(data);
-        this.setState({ comments: data, loading: false, error: false });
+        // this.setState({ comments: data, loading: false, error: false });
+        setComments(data);
+        setLoading(false);
+        setError(false);
       } else {
         alert("something went wrong");
-        this.setState({ loading: false, error: true });
+        // this.setState({ loading: false, error: true });
+        setLoading(false);
+        setError(true);
       }
     } catch (error) {
       console.log(error);
-      this.setState({ loading: false, error: true });
+      // this.setState({ loading: false, error: true });
+      setLoading(false);
+      setError(true);
     }
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevProps !== this.props) {
-      this.fetchComments();
-    }
-  }
+  // componentDidUpdate(prevProps, prevState) {
+  //   if (prevProps !== this.props) {
+  //     this.fetchComments();
+  //   }
+  // }
+  useEffect(() => {
+    fetchComments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.asin]);
 
-  render() {
-    return (
-      <div className="w-75">
-        {this.state.loading && <Loading />}
-        {this.state.error && <Error />}
-        <AddComment asin={this.props.asin} />
-        <CommentsList commentList={this.state.comments} />
-      </div>
-    );
-  }
-}
+  return (
+    <div className="w-75">
+      {loading && <Loading />}
+      {error && <Error />}
+      <AddComment asin={props.asin} />
+      <CommentsList commentList={comments} />
+    </div>
+  );
+};
 
 export default CommentArea;

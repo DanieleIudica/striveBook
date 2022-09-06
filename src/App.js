@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SingleBook from "./components/SingleBook";
 import BookList from "./components/BookList";
 import fantasyBooks from "./fantasyBooks.json";
-import { Col, Container, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import CommentArea from "./components/CommentArea";
 import { Component } from "react";
 
@@ -24,7 +24,7 @@ class App extends Component {
         <header className="App-header">
           {/* <WarningSign text="Watch out again!" />
             <MyBadge text="NEW!!" color="info" /> */}
-          <SingleBook book={fantasyBooks[0]} />
+          {/* <SingleBook book={fantasyBooks[0]} /> */}
           <Row>
             <Col>
               <BookList books={fantasyBooks} setAsin={this.setAsin} asin={this.state.asin} />
@@ -33,7 +33,7 @@ class App extends Component {
               {this.state.asin ? (
                 <CommentArea asin={this.state.asin} />
               ) : (
-                <h2 className="mt-5">Selezionare un libro</h2>
+                <h2 className="mt-5 text-danger">Selezionare un libro</h2>
               )}
             </Col>
           </Row>

@@ -1,9 +1,8 @@
-import { Component } from "react";
 import { Button, ListGroup } from "react-bootstrap";
 
 // Ogni commento sarà sempre un componente SingleComment.
-class SingleComment extends Component {
-  deleteComment = async (id) => {
+const SingleComment = (props) => {
+  const deleteComment = async (id) => {
     try {
       let response = await fetch("https://striveschool-api.herokuapp.com/api/comments/" + id, {
         method: "DELETE",
@@ -21,20 +20,15 @@ class SingleComment extends Component {
       alert("comment NOT deleted!");
     }
   };
-  render() {
-    return (
-      <ListGroup.Item style={{ color: "black" }} className="mb-3">
-        {this.props.comment.comment}
-        <Button
-          variant="danger"
-          className="ml-2"
-          onClick={() => this.deleteComment(this.props.comment._id)}
-        >
-          <i class="bi bi-trash3"></i>
-        </Button>
-      </ListGroup.Item>
-    );
-  }
-}
+
+  return (
+    <ListGroup.Item style={{ color: "black" }} className="mb-3 d-flex justify-content-between">
+      {props.comment.comment}
+      <Button variant="danger" className="ml-2" onClick={() => deleteComment(props.comment._id)}>
+        <i className="bi bi-trash3"></i>
+      </Button>
+    </ListGroup.Item>
+  );
+};
 
 export default SingleComment;
